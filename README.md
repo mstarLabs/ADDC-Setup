@@ -1,4 +1,4 @@
-# ADDC-Setup
+# ADDS-Setup
 
 This project documents the installation and base configuration of Active Directory Domain Controller to simulate a business-grade on-prem setup for endpoints to join a domain and enforce group policy controls.
 
