@@ -6,12 +6,13 @@ This project documents the installation and base configuration of Active Directo
 
 ## Overview
 **Platform:** VirtualBox  
-**ISO Used:** `pfSense-CE-2.8.0`  
+**ISO Used:** `Windows Server 2019`  
 **Base Setup Includes:**
-- Multiple NICs to simulate VLAN-separated networks
-- Static IP assignments
-- DHCP services per segment
-- Foundational firewall rules
+- Internal NIC set to simulate VLAN-separated networks
+- Static IP assignment
+- Dirctory Services Restore Mode (DSRM) Password: **vmlab2019!**
+- DNS server
+- Foundational group policies
 
 ---
 
@@ -19,10 +20,7 @@ This project documents the installation and base configuration of Active Directo
 
 |  Adapter  | VirtualBox Network  | Purpose           |
 |-----------|---------------------|-------------------|
-| Adapter 1 | NAT             | Internet access (WAN) |
-| Adapter 2 | LabNet_Trunk    | Managenment/WebUI     |
-| Adapter 3 | LabNet_VLAN10   | Infrastructure (DC01) |
-| Adapter 4 | LabNet_VLAN20   | Sales Clients  |
+| Adapter 1 | LabNet_VLAN10   | Infrastructure (DC01) |
 
 > **Note:** Each VLAN is mapped to a separate VirtualBox Internal Network. VLAN tagging (802.1Q) is not supported in VirtualBox, so each virtual NIC represents a "VLAN" segment.
 
