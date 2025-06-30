@@ -18,9 +18,15 @@ This project documents the installation and base configuration of Active Directo
 
 ## Virtual Machine Configuration  
 
+### DC01
 |  Adapter  | VirtualBox Network  | Purpose           |
 |-----------|---------------------|-------------------|
 | Adapter 1 | LabNet_VLAN10   | Infrastructure (DC01) |
+
+### Sales_Client (Win 10)
+|  Adapter  | VirtualBox Network  | Purpose           |
+|-----------|---------------------|-------------------|
+| Adapter 1 | LabNet_VLAN20   | Sales Clients (Act as VLAN) |
 
 > **Note:** Each VLAN is mapped to a separate VirtualBox Internal Network. VLAN tagging (802.1Q) is not supported in VirtualBox, so each virtual NIC represents a "VLAN" segment.
 
@@ -28,13 +34,13 @@ This project documents the installation and base configuration of Active Directo
 
 ## Initial Setup
 
-### 1. Download and Create VM
- - Navigated to `https://www.pfsense.org/download/` and downloaded ISO for virtual machines
- - Open VirtualBox, create new VM selecting the downloaded ISO of pfSense
- - Provide VM with 1 CPU, 2G RAM, and 15G Storage
- - Configure 4 adapters to simulate VLAN configuration
+### 1. Download and Create VM (DC01)
+ - Navigated to `https://www.microsoft.com/en-us/evalcenter/download-windows-server-2019` and downloaded ISO
+ - Open VirtualBox, create new VM selecting the downloaded ISO of Windows Server 2019
+ - Provide VM with 2 CPU, 4G RAM, and 30G Storage
+ - Configure 1 adapter to simulate VLAN configuration
 
-Ref 1: pfSense VM Configuration
+Ref 1: Windows Server 2019 VM Configuration
 ![pfSense_VM_Configuration](https://github.com/user-attachments/assets/156e5807-00e6-44d6-a6dc-a0040d144a96)
 
 ### 2. Configure pfSense Interfaces
