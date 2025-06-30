@@ -41,7 +41,7 @@ This project documents the installation and base configuration of Active Directo
  - Configure 1 adapter to simulate VLAN configuration (LabNet_VLAN10)
 
 Ref 1: Windows Server 2019 VM Configuration
-![pfSense_VM_Configuration](https://github.com/user-attachments/assets/156e5807-00e6-44d6-a6dc-a0040d144a96)
+![DC01_VM_Configuration](https://github.com/user-attachments/assets/d42e1ba6-36cf-4783-afa5-f31c794c609c)
 
 ### 2. Add AD DS Feature
  - Once isntalled first need to set the static IP to `192.168.10.5` and DNS to `127.0.0.1`
@@ -51,7 +51,7 @@ Ref 1: Windows Server 2019 VM Configuration
  - After install promoted server to domain controllor
 
 Ref 2: ADDS Promote to Domain Controllor
-![pfSense_Interfaces](https://github.com/user-attachments/assets/0bd3cb82-8197-439a-81f2-bb0ad15e4586)
+![DC01_PromoteToDC](https://github.com/user-attachments/assets/56001562-a967-47c3-9311-c44bbf0f625c)
 
  - Added a new forest `lab.local`
  - Kept DNS making DC01 the DNS server as well
@@ -59,12 +59,13 @@ Ref 2: ADDS Promote to Domain Controllor
  - Opened DNS Manager to ensure Host(A) was created and DNS was set to `8.8.8.8` and `1.1.1.1`
 
 Ref 3: DNS Manager
-![pfSense_DHCP_Settings](https://github.com/user-attachments/assets/61a727a4-0ae7-417a-9459-c381c105d27b)
+![DC01_DNSManager](https://github.com/user-attachments/assets/49ff9ed2-f458-47bb-985b-62e23048adad)
 
  - Opened `Active Director Users and Computers` to create some new OU folders for department users
  - Created a Sales and HR test user
 
 Ref 3: User Listing
+![DC01_Users](https://github.com/user-attachments/assets/99be2487-f96b-47f1-aad6-dab0f0c68278)
 
 ### 3. Domain Join Sales Client (Win10)
  - Navigated to `https://www.microsoft.com/en-us/software-download/windows10` and downloaded Windows 10 Installation Media
@@ -75,13 +76,13 @@ Ref 3: User Listing
  - During instalation selected Windows 10 Pro
 
 Ref 4: Windows 10 VM Configuration
-![VLAN10_Firewall_Rules](https://github.com/user-attachments/assets/9fee0708-fdea-4e20-b7f9-78a4211f25f0)
+![SalesClient_VM_Configuration](https://github.com/user-attachments/assets/cb9e3cff-6162-431b-8233-fbd0b0cd15f9)
 
 - Check communication from VLAN20_SALES to VLAN10_INFRA ensure they can see eachother in the simulated VLANs with pfSense
 - Connect to lab.local domain using the Sales Test user as login
 
 Ref 5: Sales Client Domain Joined
-![VLAN20_Firewall_Rules](https://github.com/user-attachments/assets/7fe51df3-1cf0-47a2-868f-3efa058281cd)
+![SalesClient_DomainJoin](https://github.com/user-attachments/assets/a9361b8c-d495-4f32-b953-20e53c124846)
 
 > VLAN30_HR and VLAN40_HR_FS01 rules will be craeted later as there is not enough network interfaced in VirtualBox to have all simulated VLANs at the same time.
 
@@ -98,15 +99,22 @@ Ref 5: Sales Client Domain Joined
  - Even with the change still could not get DNS to work; After a change of destination to any on port 53 with the source teh DC01, DNS started resolving
  - I am still not sure why setting he destination to Any works only thing I can think of is has to do with routing in pfSense
  - Ran testing in powershell tihe a `Test-NetConnection lab.local -Port 389` as well as port `135`, and port `445` These all came back good but domain join still did not work
+
+Ref 6: Tested port connection to DC01
+![SalesClient_PortTest](https://github.com/user-attachments/assets/5fc18da7-e9b1-40fe-ae12-85ee914d9128)
+ 
  - Discovered an article that provides a list of ports that need to be added to pfSense to allow AD Domain join
+ - Made changes to VLAN20
+ - I was missing port `135` for RPC endpoint mapper, port `139` for NetBIOS Sessions Service, ports  `49152 - 65535` for dynamic RPC ports port `137` and `138` were optional but added them anyway
+ - To get internet I added TCP/UPD port `443` and `80` and got rid of the allow all to any rule
+ - On VLAN10 I set a DC to any on port TCP/UDP 53 allow to get DNS working.
+ - These changed allowed the Sales client on VLAN20 to resolve DNS and join the domain lab.local
 
 ---
 
 ##  Skills Practiced
 
-- Virtual Firewall Deployment (pfSense CE)
-- Multi-NIC Configureation in VirtualBox
-- DHCP and Static IP Addressing per Network Segment
-- Inter-VLAN Routing and Access Control
-- Firewall Rule Creation and Port Based Filtering
-- Documentation of Technical Configuration
+- Active Directory Domain Service setup
+- Creating new OU containers and users within the domain
+- Ensuring DNS Manger is configured
+- 
