@@ -41,6 +41,7 @@ This project documents the installation and base configuration of Active Directo
  - Configure 1 adapter to simulate VLAN configuration (LabNet_VLAN10)
 
 Ref 1: Windows Server 2019 VM Configuration
+
 ![DC01_VM_Configuration](https://github.com/user-attachments/assets/d42e1ba6-36cf-4783-afa5-f31c794c609c)
 
 ### 2. Add AD DS Feature
@@ -51,6 +52,7 @@ Ref 1: Windows Server 2019 VM Configuration
  - After install promoted server to domain controllor
 
 Ref 2: ADDS Promote to Domain Controllor
+
 ![DC01_PromoteToDC](https://github.com/user-attachments/assets/56001562-a967-47c3-9311-c44bbf0f625c)
 
  - Added a new forest `lab.local`
@@ -59,12 +61,14 @@ Ref 2: ADDS Promote to Domain Controllor
  - Opened DNS Manager to ensure Host(A) was created and DNS was set to `8.8.8.8` and `1.1.1.1`
 
 Ref 3: DNS Manager
-![DC01_DNSManager](https://github.com/user-attachments/assets/49ff9ed2-f458-47bb-985b-62e23048adad)
+
+![DC01_DNSManager](https://github.com/user-attachments/assets/6abe636c-e106-4f5d-9bb1-7aa7366a634b)
 
  - Opened `Active Director Users and Computers` to create some new OU folders for department users
  - Created a Sales and HR test user
 
 Ref 3: User Listing
+
 ![DC01_Users](https://github.com/user-attachments/assets/99be2487-f96b-47f1-aad6-dab0f0c68278)
 
 ### 3. Domain Join Sales Client (Win10)
@@ -76,12 +80,14 @@ Ref 3: User Listing
  - During instalation selected Windows 10 Pro
 
 Ref 4: Windows 10 VM Configuration
+
 ![SalesClient_VM_Configuration](https://github.com/user-attachments/assets/cb9e3cff-6162-431b-8233-fbd0b0cd15f9)
 
 - Check communication from VLAN20_SALES to VLAN10_INFRA ensure they can see eachother in the simulated VLANs with pfSense
 - Connect to lab.local domain using the Sales Test user as login
 
 Ref 5: Sales Client Domain Joined
+
 ![SalesClient_DomainJoin](https://github.com/user-attachments/assets/a9361b8c-d495-4f32-b953-20e53c124846)
 
 > VLAN30_HR and VLAN40_HR_FS01 rules will be craeted later as there is not enough network interfaced in VirtualBox to have all simulated VLANs at the same time.
@@ -101,6 +107,7 @@ Ref 5: Sales Client Domain Joined
  - Ran testing in powershell tihe a `Test-NetConnection lab.local -Port 389` as well as port `135`, and port `445` These all came back good but domain join still did not work
 
 Ref 6: Tested port connection to DC01
+
 ![SalesClient_PortTest](https://github.com/user-attachments/assets/5fc18da7-e9b1-40fe-ae12-85ee914d9128)
  
  - Discovered an article that provides a list of ports that need to be added to pfSense to allow AD Domain join
