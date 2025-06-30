@@ -38,40 +38,46 @@ This project documents the installation and base configuration of Active Directo
  - Navigated to `https://www.microsoft.com/en-us/evalcenter/download-windows-server-2019` and downloaded ISO
  - Open VirtualBox, create new VM selecting the downloaded ISO of Windows Server 2019
  - Provide VM with 2 CPU, 4G RAM, and 30G Storage
- - Configure 1 adapter to simulate VLAN configuration
+ - Configure 1 adapter to simulate VLAN configuration (LabNet_VLAN10)
 
 Ref 1: Windows Server 2019 VM Configuration
 ![pfSense_VM_Configuration](https://github.com/user-attachments/assets/156e5807-00e6-44d6-a6dc-a0040d144a96)
 
-### 2. Configure pfSense Interfaces
- - Connect second VM to LabNet_Trunk interface to get a connection to pfSense
- - Navigate to `192.168.1.1` to access WebUI of pfSense
- - After login change default credentials for security
- - Navigate to `Interfaces>Assignments` and ensure all 4 interfaced are showing and connected `em0` = WAN, `em1` = Management (LabNet_Trunk), `em2` = VLAN10_INFRA (LabNet_VLAN10), `em3` = VLAN20_SALES (LabNet_VLAN20)
- - Edit `em2` and `em3` changing their name to simulate VLANs, enable interface, set IPv4 to static, set VLAN IP
-> VLAN10_INFRA IP: 192.168.10.1/24, VLAN20_SALES IP: 192.168.20.1/24
+### 2. Add AD DS Feature
+ - Once isntalled first need to set the static IP to `192.168.10.5` and DNS to `127.0.0.1`
+ - Opened Server Manager navigated to "Add Roles and Features"
+ - Checked Active Directory Domain Services
+ - Kept default settings
+ - After install promoted server to domain controllor
 
-Ref 2: Interface
+Ref 2: ADDS Promote to Domain Controllor
 ![pfSense_Interfaces](https://github.com/user-attachments/assets/0bd3cb82-8197-439a-81f2-bb0ad15e4586)
 
- - Navigate to `Services>DHCP Server`, select the simulated VLAN interface
- - Turn on DHCP, setting the range `192.168.10.100 - 192.168.10.200` DNS `8.8.8.8` and `1.1.1.1`
-> Do this for each VLAN changing the 3rd octect to the correct VLAN IP
+ - Added a new forest `lab.local`
+ - Kept DNS making DC01 the DNS server as well
+ - Once installed switched to LAB\Administrator user
+ - Opened DNS Manager to ensure Host(A) was created and DNS was set to `8.8.8.8` and `1.1.1.1`
 
-Ref 3: DHCP Settings
+Ref 3: DNS Manager
 ![pfSense_DHCP_Settings](https://github.com/user-attachments/assets/61a727a4-0ae7-417a-9459-c381c105d27b)
 
-### 3. Configure Firewall Rules
- - Navigate to `Firewall>Rules` and select `VLAN10` to begin setting rules.
- - To allow the DC01 to access pfSense WebUI create rule `Action: Pass, Interface: 192.168.10.5 Protocol: TCP, Source: 192.168.10.5, Destination: 192.168.10.1, Port: 443, Description: Allow access to pfSense WebUI`
- - Temporarily add an allow all outbound rule for internet `Action: Pass, Interface: 192.168.10.5 Protocol: TCP/UPD, Source: 192.168.10.5, Destination: Any, Port: Any, Description: Allow all outbound internet access`
- - Create rules for domain join ports; LDAP, Kerberos, SMB, NTP, DNS. 
+ - Opened `Active Director Users and Computers` to create some new OU folders for department users
+ - Created a Sales and HR test user
 
-Ref 4: VLAN10_INFRA Rules
+
+### 3. Domain Join Sales Client (Win10)
+ - Navigated to `https://www.microsoft.com/en-us/software-download/windows10` and downloaded Windows 10 Installation Media
+ - Created a Windows 10 ISO using Microsofts creation media tool
+ - Open VirtualBox, create new VM selecting the downloaded ISO of Windows 10
+ - Provide VM with 2 CPU, 4G RAM, and 50G Storage
+ - Configure 1 adapter to simulate VLAN configuration (LabNet_VLAN20)
+ - During instalation selected Windows 10 Pro
+
+Ref 4: Windows 10 VM Configuration
 ![VLAN10_Firewall_Rules](https://github.com/user-attachments/assets/9fee0708-fdea-4e20-b7f9-78a4211f25f0)
 
-- Create VLAN20_SALES rule for domain joining. Allowing Kerberos, LDAP, SMB, NTP, DNS.
-- Create Temporary allow all outbout rule for internet `Action: Pass, Interface: VLAN20_SALES Protocol: TCP/UPD, Source: VLAN20_SALES, Destination: Any, Port: Any, Description: Allow all outbound internet access`
+- Check communication from VLAN20_SALES to VLAN10_INFRA ensure they can see eachother in the simulated VLANs with pfSense
+- 
 
 Ref 5: VLAN20_SALES Rules
 ![VLAN20_Firewall_Rules](https://github.com/user-attachments/assets/7fe51df3-1cf0-47a2-868f-3efa058281cd)
