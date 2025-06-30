@@ -18,7 +18,7 @@ This project documents the installation and base configuration of Active Directo
 
 ## Virtual Machine Configuration  
 
-### DC01
+### DC01 (Windows Server 2019)
 |  Adapter  | VirtualBox Network  | Purpose           |
 |-----------|---------------------|-------------------|
 | Adapter 1 | LabNet_VLAN10   | Infrastructure (DC01) |
