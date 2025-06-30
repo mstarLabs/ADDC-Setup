@@ -45,7 +45,7 @@ Ref 1: Windows Server 2019 VM Configuration
 ![DC01_VM_Configuration](https://github.com/user-attachments/assets/d42e1ba6-36cf-4783-afa5-f31c794c609c)
 
 ### 2. Add AD DS Feature
- - Once isntalled first need to set the static IP to `192.168.10.5` and DNS to `127.0.0.1`
+ - After installation set a static IP to `192.168.10.5` and configure the DNS to `127.0.0.1`
  - Opened Server Manager navigated to "Add Roles and Features"
  - Checked Active Directory Domain Services
  - Kept default settings
