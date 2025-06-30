@@ -64,6 +64,7 @@ Ref 3: DNS Manager
  - Opened `Active Director Users and Computers` to create some new OU folders for department users
  - Created a Sales and HR test user
 
+Ref 3: User Listing
 
 ### 3. Domain Join Sales Client (Win10)
  - Navigated to `https://www.microsoft.com/en-us/software-download/windows10` and downloaded Windows 10 Installation Media
@@ -77,12 +78,28 @@ Ref 4: Windows 10 VM Configuration
 ![VLAN10_Firewall_Rules](https://github.com/user-attachments/assets/9fee0708-fdea-4e20-b7f9-78a4211f25f0)
 
 - Check communication from VLAN20_SALES to VLAN10_INFRA ensure they can see eachother in the simulated VLANs with pfSense
-- 
+- Connect to lab.local domain using the Sales Test user as login
 
-Ref 5: VLAN20_SALES Rules
+Ref 5: Sales Client Domain Joined
 ![VLAN20_Firewall_Rules](https://github.com/user-attachments/assets/7fe51df3-1cf0-47a2-868f-3efa058281cd)
 
-> VLAN30_HR and VLAN40_HR_FS01 rules will be craeted later as there is not enough network interfaced in VirtualBox to have all simulated VLANs at the same time. 
+> VLAN30_HR and VLAN40_HR_FS01 rules will be craeted later as there is not enough network interfaced in VirtualBox to have all simulated VLANs at the same time.
+
+---
+
+## Troubleshooting Issues
+
+### Domain Joining
+ - Domin join worked right off the bat, but figured this was do to the catch allow all rule at the end
+ - When rule is disabled domain join does not work nor did nslookup to ensure DNS was working
+ - Discovered pfSense source or destiniaton labled with "interface name" address did not mean all IPs on that interface
+ - Changed all firewall setting to "interface name" subnet which did mean all IPs on that interface
+ - DNS was still not working after that change so looked at VLAN10 rules to ensure I made the change to subnet as well
+ - Even with the change still could not get DNS to work; After a change of destination to any on port 53 with the source teh DC01, DNS started resolving
+ - I am still not sure why setting he destination to Any works only thing I can think of is has to do with routing in pfSense
+ - Ran testing in powershell tihe a `Test-NetConnection lab.local -Port 389` as well as port `135`, and port `445` These all came back good but domain join still did not work
+ - Discovered an article that provides a list of ports that need to be added to pfSense to allow AD Domain join
+
 ---
 
 ##  Skills Practiced
