@@ -61,7 +61,7 @@ Ref 1: Windows Server 2019 VM Configuration
  - Installed `Active Directory Domain Services` via Server Manager
  - Kept default settings
  - Promoted server to `Domain Controller` for the new forest: `lab.local`
- - Seitched to `LAB\Administrator` to finish setup
+ - Switched to `LAB\Administrator` to finish setup
 
 Ref 2: ADDS Promote to Domain Controllor
 
